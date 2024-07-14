@@ -23,16 +23,11 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private IUserRepository userRepository ;
-	private BCryptPasswordEncoder passwordEncoder;
-
 
 	@Autowired
-	public UserServiceImpl(IUserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
-	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private  BCryptPasswordEncoder passwordEncoder;
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
 	@Override
 	public User saveUser(User user) {
@@ -41,11 +36,12 @@ public class UserServiceImpl implements IUserService {
 		user.setUserId(userId);
 		// password encode
 		// user.setpassword(userId)
-		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-		logger.info((user.getProvider().toString()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		// set user role
 		user.setRoleList(List.of(ConstantUtils.ROLE_USER));
- 		return userRepository.save(user);
+
+		logger.info((user.getProvider().toString()));
+		return userRepository.save(user);
 	}
 
 	@Override

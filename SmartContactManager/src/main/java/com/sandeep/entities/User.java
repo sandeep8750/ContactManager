@@ -7,11 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +35,8 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     //information
-    private boolean enabled = false;
+    @Getter(AccessLevel.NONE)
+    private boolean enabled = true;
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
 
@@ -57,27 +54,35 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> roles = roleList.stream().map((role) -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+        //list of roles [USER,ADMIN]
+        // collection of simpleGrantedAuthority [roles{ADMIN,USER}]
+        Collection<SimpleGrantedAuthority> roles = roleList.stream().map((role) -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
         return roles;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
 }

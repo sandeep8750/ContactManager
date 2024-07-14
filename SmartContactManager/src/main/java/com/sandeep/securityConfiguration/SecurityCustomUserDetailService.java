@@ -1,5 +1,6 @@
 package com.sandeep.securityConfiguration;
 
+import com.sandeep.entities.User;
 import com.sandeep.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +16,14 @@ public class SecurityCustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // apne user ko load karana hai
-        return userRepo.findByEmail(username)
+        User user = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + username));
 
+        System.out.println(user.getName());
+        System.out.println("====================");
+        System.out.println(user.getEmail());
+        System.out.println("====================");
+        System.out.println(user.getPassword());
+        return  user;
     }
 }
