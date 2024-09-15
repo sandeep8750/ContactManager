@@ -3,15 +3,16 @@ package com.sandeep.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.sandeep.entities.User;
+import com.sandeep.entities.UserEntity;
+import com.sandeep.entities.UserEntity;
 
 public interface IUserService {
 
-	User saveUser(User user);
+	UserEntity saveUser(UserEntity user);
 
-	Optional<User> geUserById(String id);
+	Optional<UserEntity> geUserById(String id);
 
-	Optional<User> updateUser(User user);
+	Optional<UserEntity> updateUser(UserEntity user);
 
 	void deleteUser(String id);
 
@@ -19,5 +20,7 @@ public interface IUserService {
 
 	boolean isUserExistByEmail(String email);
 
-	List<User> getAllUser();
+	List<UserEntity> getAllUser();
+
+	UserEntity getUserByEmail(String email);
 }

@@ -1,4 +1,4 @@
-package com.sandeep.securityConfiguration;
+package com.sandeep.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

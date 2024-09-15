@@ -1,4 +1,4 @@
-package com.sandeep.securityConfiguration;
+package com.sandeep.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,10 @@ public class SecurityConfig {
     @Autowired
     private SecurityCustomUserDetailService userDetailService;
 
+    @Autowired
+    private  OAuthAuthenticationSuccessHandler authAuthenticationSuccessHandler;
+
+
     // configuration of authentication provider for spring security
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -33,6 +37,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         // configuration
@@ -42,12 +51,13 @@ public class SecurityConfig {
             authorize.anyRequest().permitAll();
         });
 
+
         httpSecurity.formLogin(formLogin -> {
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");
-            formLogin.successForwardUrl("/user/profile");
+            formLogin.successForwardUrl("/user/dashboard");
             formLogin.failureForwardUrl("/login?error=true");
-            // formLogin.defaultSuccessUrl("/home");
+           // formLogin.defaultSuccessUrl("/home");
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
         });
@@ -55,23 +65,21 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         // oauth configurations
 
-//        httpSecurity.oauth2Login(oauth -> {
-//            oauth.loginPage("/login");
-//            oauth.successHandler(handler);
-//        });
+        httpSecurity.oauth2Login(oauth -> {
+            oauth.loginPage("/login");
+            oauth.successHandler(authAuthenticationSuccessHandler);
+        });
 
         httpSecurity.logout(logoutForm -> {
-            logoutForm.logoutUrl("/do-logout");
+            logoutForm.logoutUrl("/logout");
             logoutForm.logoutSuccessUrl("/login?logout=true");
+
         });
 
         return httpSecurity.build();
 
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 }
 

@@ -1,18 +1,17 @@
-package com.sandeep.services.impl;
+package com.sandeep.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.sandeep.entities.UserEntity;
 import com.sandeep.helper.ConstantUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sandeep.entities.User;
 import com.sandeep.helper.ResourceNotFoundException;
 import com.sandeep.repositories.IUserRepository;
 import com.sandeep.services.IUserService;
@@ -30,7 +29,7 @@ public class UserServiceImpl implements IUserService {
 
 
 	@Override
-	public User saveUser(User user) {
+	public UserEntity saveUser(UserEntity user) {
 		//user id : have to generate 
 		String userId = UUID.randomUUID().toString();
 		user.setUserId(userId);
@@ -40,19 +39,18 @@ public class UserServiceImpl implements IUserService {
 		// set user role
 		user.setRoleList(List.of(ConstantUtils.ROLE_USER));
 
-		logger.info((user.getProvider().toString()));
 		return userRepository.save(user);
 	}
 
 	@Override
-	public Optional<User> geUserById(String id) {
+	public Optional<UserEntity> geUserById(String id) {
 		return userRepository.findById(id);
 	}
 
 	@Override
-	public Optional<User> updateUser(User user) {
+	public Optional<UserEntity> updateUser(UserEntity user) {
 		
-	User user2 = userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User not Found"));
+	UserEntity user2 = userRepository.findById(user.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User not Found"));
 	
 	user2.setName(user.getName());
 	user2.setEmail(user.getEmail());
@@ -66,14 +64,14 @@ public class UserServiceImpl implements IUserService {
 	user2.setProvider(user.getProvider());
 	user2.setProviderUserId(user.getProviderUserId());
 	
-	User sUser = userRepository.save(user2);
+	UserEntity sUser = userRepository.save(user2);
 	
 	return Optional.ofNullable(sUser);
 	}
 
 	@Override
 	public void deleteUser(String id) {
-		User user2 = userRepository.findById(id)
+		UserEntity user2 = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User not Found"));
 		
 		userRepository.delete(user2);
@@ -82,23 +80,25 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public boolean isUserExist(String userId) {
-	 User user2 = userRepository.findById(userId).orElse(null);
+	 UserEntity user2 = userRepository.findById(userId).orElse(null);
 		return  user2!= null ? true :false;
 	}
 
 	@Override
 	public boolean isUserExistByEmail(String email) {
-		User user = userRepository.findByEmail(email).orElse(null);
+		UserEntity user = (UserEntity) userRepository.findByEmail(email).orElse(null);
 		return user!=null ? true :false;
 	}
 
 	@Override
-	public List<User> getAllUser() {
+	public List<UserEntity> getAllUser() {
 	return userRepository.findAll();
 	}
 
+	@Override
+	public UserEntity getUserByEmail(String email) {
+		return userRepository.findByEmail(email).orElse(null)	;
+	}
 
-
-	
 
 }

@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     private String userId;

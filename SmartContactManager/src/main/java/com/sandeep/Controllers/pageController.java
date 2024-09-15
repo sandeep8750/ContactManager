@@ -1,8 +1,10 @@
 package com.sandeep.Controllers;
 
-import com.sandeep.entities.User;
+import com.sandeep.entities.UserEntity;
+import com.sandeep.entities.UserEntity;
 import com.sandeep.helper.Color;
 import com.sandeep.helper.Message;
+import com.sandeep.repositories.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,13 @@ import com.sandeep.services.IUserService;
 public class pageController {
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IUserRepository userRepository;
+
+    @GetMapping("/")
+    public String getIndex() {
+        return "redirect:/home";
+    }
 
     @RequestMapping("/home")
     public String home(Model model) {
@@ -46,15 +55,15 @@ public class pageController {
     }
 
     // login
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String login() {
         return "login";
     }
 
-    @PostMapping
-    public String login(String s){
-        return "login";
-    }
+//    @PostMapping("/login")
+//    public String login(String s){
+//        return "login";
+//    }
 
 
     // Register
@@ -68,31 +77,37 @@ public class pageController {
 
     // processing register
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String processRegister(Model model ,@Valid @ModelAttribute(name = "userFormReqDTO") UserFormReqDTO UserFormReqDTO , BindingResult result, HttpSession session) {
+    public String processRegister(Model model, @Valid @ModelAttribute(name = "userFormReqDTO") UserFormReqDTO userFormReqDTO, BindingResult result, HttpSession session) {
 
-        if(result.hasErrors())
-        {
+        Message message;
+        if (result.hasErrors()) {
             return "register";
         }
-        User user = new User();
+        UserEntity user = new UserEntity();
 
-        user.setName(UserFormReqDTO.getName());
-        user.setEmail((UserFormReqDTO.getEmail()));
-        user.setPassword(UserFormReqDTO.getPassword());
-        user.setAbout(UserFormReqDTO.getAbout());
-        user.setPhoneNumber(UserFormReqDTO.getPhoneNumber());
+        user.setName(userFormReqDTO.getName());
+        user.setEmail((userFormReqDTO.getEmail()));
+        user.setPassword(userFormReqDTO.getPassword());
+        user.setAbout(userFormReqDTO.getAbout());
+        user.setPhoneNumber(userFormReqDTO.getPhoneNumber());
         user.setProfilePicLink("https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-sample-grunge-red-round-stamp.jpg");
 
-        userService.saveUser(user);
+        if (!userRepository.existsByEmail(userFormReqDTO.getEmail())) {
+            userService.saveUser(user);
+            message = Message.builder()
+                    .content("Registration Successfully Bosss....")
+                    .color(Color.blue)
+                    .build();
+            System.out.println("User Saved Successfully..... id>" + userFormReqDTO.getEmail());
+            System.out.println("User Saved Successfully..... pass>" + userFormReqDTO.getPassword());
+        } else {
+            message = Message.builder().content("User already exist with same email id !").color(Color.red).build();
+        }
 
-        Message message = Message.builder()
-                .content("Registration Successfully Bosss....")
-                .color(Color.blue)
-                .build();
 
-        session.setAttribute("message",message);
+        session.setAttribute("message", message);
 
-        System.out.println("User Saved Successfully.....");
+
         return "redirect:/register";
     }
 
