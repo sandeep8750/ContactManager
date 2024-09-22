@@ -21,8 +21,7 @@ import lombok.Data;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Changed from String to Long for MySQL compatibility
+    private String id; // Changed from String to Long for MySQL compatibility
 
     private String name;
     private String email;
