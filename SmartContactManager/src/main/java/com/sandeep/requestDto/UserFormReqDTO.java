@@ -1,4 +1,4 @@
-package com.sandeep.forms;
+package com.sandeep.requestDto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

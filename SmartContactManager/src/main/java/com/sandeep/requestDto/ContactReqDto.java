@@ -39,8 +39,6 @@ public class ContactReqDto {
         // annotation create karenge jo file validate
         // size
         // resolution
-
-
         private MultipartFile contactImage;
 
         private String picture;

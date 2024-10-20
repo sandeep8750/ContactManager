@@ -1,5 +1,6 @@
 package com.sandeep.helper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
@@ -7,7 +8,9 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.security.Principal;
+import java.util.Map;
 
+@Slf4j
 public class Helper {
     public static String getUserName(Authentication authentication) {
 
@@ -21,8 +24,11 @@ public class Helper {
             var oauth2User = (OAuth2User) authentication.getPrincipal();
             String username = "";
 
-            if (clientId.equalsIgnoreCase("google")) {
 
+          log.info("logged user all details =>{}",oauth2User.getAttributes());
+
+
+            if (clientId.equalsIgnoreCase("google")) {
                 // sign with google
                 System.out.println("Getting email from google");
                 username = oauth2User.getAttribute("email").toString();

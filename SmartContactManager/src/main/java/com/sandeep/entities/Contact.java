@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Data
@@ -27,19 +28,21 @@ public class Contact {
     private String email;
     private String phoneNumber;
     private String address;
-    private String pricture; // Typo in the field name?
-
+    private String picture;
     @Column(length = 1000)
     private String description;
 
     private boolean favorite = false;
     private String websiteLink;
     private String linkedInLink;
-    
+
+    private String cloudinaryImagePublicId;
+
     @ManyToOne
     private UserEntity user;
     
     @OneToMany(mappedBy = "contact",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SocialLinks> socialLinks = new ArrayList<>();
-   
+
+
 }

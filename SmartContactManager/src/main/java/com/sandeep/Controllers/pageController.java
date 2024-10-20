@@ -1,7 +1,6 @@
 package com.sandeep.Controllers;
 
 import com.sandeep.entities.UserEntity;
-import com.sandeep.entities.UserEntity;
 import com.sandeep.helper.Color;
 import com.sandeep.helper.Message;
 import com.sandeep.repositories.IUserRepository;
@@ -13,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.sandeep.forms.UserFormReqDTO;
+import com.sandeep.requestDto.UserFormReqDTO;
 import com.sandeep.services.IUserService;
 
 @Controller
