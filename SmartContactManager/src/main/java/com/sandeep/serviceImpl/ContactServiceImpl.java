@@ -1,6 +1,7 @@
 package com.sandeep.serviceImpl;
 
 import com.sandeep.entities.Contact;
+import com.sandeep.entities.UserEntity;
 import com.sandeep.repositories.IContactRepository;
 import com.sandeep.services.IContactService;
 import lombok.AllArgsConstructor;
@@ -35,12 +36,12 @@ public class ContactServiceImpl implements IContactService {
 
     @Override
     public List<Contact> getAll() {
-        return null;
+        return contactRepository.findAll();
     }
 
     @Override
     public Contact getById(String id) {
-        return null;
+        return  contactRepository.findByUser(UserEntity user) ;
     }
 
     @Override
